@@ -1,0 +1,33 @@
+<html>
+    <body>
+       <form method="post" id="myform">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit"/>
+    </form>
+    <div id="alert" style="display:none;"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(function(){
+            $("#myform").on('submit',function(event){
+                event.preventDefault();
+                $.ajax({
+                    url:'{% url "index" %}',
+                    type:'POST',
+                    data:$(this).serialize(),
+                    dataType:'json',
+                    success:function(response){
+                        if(response.success){
+                            $('#alert').html('<div class="alert alert-success">Thank you for your msg </div>').show()
+                        }else{
+                            $('#alert').html('<div class="alert alert-danger">Something went wrong </div>').show()
+                        }
+                    }
+
+                })
+            })
+        })
+    </script>    
+   
+    </body>
+</html>
